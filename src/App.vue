@@ -1,14 +1,25 @@
 <template>
-  <div id="app">
-  </div>
+  <div id="app">{{ list }}</div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 
 export default {
   name: "App",
-  components: {
-    Form,
+  components: {},
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState(["list"]),
+  },
+  mounted() {
+    fetch("https://random-data-api.com/api/food/random_food?size=30")
+      .then((blob) => blob.json())
+      .then((result) => {
+        this.$store.dispatch("getList", result);
+      });
   },
 };
 </script>
