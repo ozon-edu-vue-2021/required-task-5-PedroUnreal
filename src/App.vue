@@ -15,11 +15,12 @@ export default {
     ...mapState(["list"]),
   },
   mounted() {
-    fetch("https://random-data-api.com/api/food/random_food?size=30")
-      .then((blob) => blob.json())
-      .then((result) => {
-        this.$store.dispatch("getList", result);
-      });
+    //   fetch("https://random-data-api.com/api/food/random_food?size=30")
+    //     .then((blob) => blob.json())
+    //     .then((result) => {
+    //       this.$store.dispatch("getList", result);
+    //     });
+    this.$store.dispatch("getList");
   },
 };
 </script>
