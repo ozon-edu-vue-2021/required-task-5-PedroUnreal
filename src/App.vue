@@ -1,13 +1,23 @@
 <template>
-  <div id="app">{{ list }}</div>
+  <div id="app">
+    <div class="product-wrapper">
+      <ProductCard
+        v-for="(item, index) in list"
+        :key="item.id"
+        :index="index"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-
+import ProductCard from "./components/ProductCard.vue";
 export default {
   name: "App",
-  components: {},
+  components: {
+    ProductCard,
+  },
   data() {
     return {};
   },
@@ -38,6 +48,12 @@ html,
 body,
 #app {
   height: 100%;
+}
+
+.product-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
 }
 
 * {

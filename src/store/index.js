@@ -15,7 +15,7 @@ export default new Vuex.Store({
   actions: {
     getList: async (context) => {
       let list = await fetch(
-        "https://random-data-api.com/api/food/random_food?size=30"
+        "https://random-data-api.com/api/food/random_food?size=12"
       );
       list = await list.json();
       console.log(typeof list, "!!!");
