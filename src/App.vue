@@ -1,35 +1,18 @@
 <template>
   <div id="app">
-    <div class="product-wrapper">
-      <ProductCard
-        v-for="(item, index) in list"
-        :key="item.id"
-        :index="index"
-      />
-    </div>
+    <router-view />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import ProductCard from "./components/ProductCard.vue";
 export default {
   name: "App",
-  components: {
-    ProductCard,
-  },
-  data() {
-    return {};
-  },
+
   computed: {
-    ...mapState(["list"]),
+    ...mapState(["list", "basket"]),
   },
   mounted() {
-    //   fetch("https://random-data-api.com/api/food/random_food?size=30")
-    //     .then((blob) => blob.json())
-    //     .then((result) => {
-    //       this.$store.dispatch("getList", result);
-    //     });
     this.$store.dispatch("getList");
   },
 };
@@ -45,7 +28,10 @@ export default {
 }
 
 html,
-body,
+body {
+  margin-bottom: 2px;
+  margin: 0 auto;
+}
 #app {
   height: 100%;
 }
@@ -58,5 +44,34 @@ body,
 
 * {
   box-sizing: border-box;
+}
+
+.button {
+  display: inline-block;
+  color: white;
+  font-size: 1em;
+  text-decoration: none;
+  padding: 0.5em 2em;
+  outline: none;
+  border-width: 2px 0;
+  border-style: solid none;
+  border-color: #fdbe33 #000 #d77206;
+  border-radius: 6px;
+  background: linear-gradient(#f3ae0f, #e38916) #e38916;
+  transition: 0.2s;
+}
+.button:hover {
+  background: linear-gradient(#f5ae00, #f59500) #f5ae00;
+}
+
+.button:active {
+  background: linear-gradient(#f59500, #f5ae00) #f59500;
+}
+img {
+  border-radius: 10%;
+}
+
+button {
+  cursor: pointer;
 }
 </style>

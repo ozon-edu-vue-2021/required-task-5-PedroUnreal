@@ -6,10 +6,28 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: () => ({
     list: [],
+    basket: [],
   }),
   mutations: {
     setProductList: (state, newList) => {
       state.list = newList;
+    },
+    putIntoBasket: (state, newProduct) => {
+      state.basket.push(newProduct);
+    },
+    putIntoLiked: (state, { liked, id }) => {
+      state.list.forEach((item) =>
+        item.id === id ? (item.liked = liked) : ""
+      );
+    },
+    changeQty: (state, { qty, id }) => {
+      state.basket.forEach((item, index) =>
+        item.id === id
+          ? qty === 0
+            ? state.basket.splice(index, 1)
+            : (item.qty = qty)
+          : ""
+      );
     },
   },
   actions: {
@@ -18,8 +36,15 @@ export default new Vuex.Store({
         "https://random-data-api.com/api/food/random_food?size=12"
       );
       list = await list.json();
-      console.log(typeof list, "!!!");
       context.commit("setProductList", list);
+    },
+  },
+  getters: {
+    getTotal: (state) => {
+      return state.basket.reduce((accumulator, currentValue) => {
+        currentValue = currentValue.price * currentValue.qty;
+        return accumulator + currentValue;
+      }, 0);
     },
   },
 });
