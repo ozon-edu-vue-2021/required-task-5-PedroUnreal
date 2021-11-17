@@ -3,7 +3,7 @@
     <div class="product">
       <img :src="src" />
       <div class="price">{{ calcPrice }} руб</div>
-      <div v-if="liked.liked" class="star">Избранное</div>
+      <div v-if="isLiked" class="star">Избранное</div>
       <div class="description">{{ description }}</div>
       <div class="botton-menu">
         <button @click="putIntoBasket" type="button" class="button">
@@ -16,7 +16,7 @@
           :update="this.update"
         />
         <button @click="putIntoLiked" type="button" class="liked">
-          Добавить в избранное
+          {{isLiked? "Удалить из избранного" : "Добавить в избранное" }}
         </button>
       </div>
     </div>
@@ -53,8 +53,8 @@ export default {
     id() {
       return this.list[this.index].id;
     },
-    liked() {
-      return this.list[this.index];
+    isLiked() {
+      return this.list[this.index].liked;
     },
     calcPrice() {
       return Math.floor((this.list[this.index].id / 27) * 2);
@@ -95,12 +95,19 @@ export default {
       this.qty = this.localQty;
     },
     putIntoLiked() {
-      this.$store.commit("putIntoLiked", {
-        liked: true,
-        id: this.id,
-      });
-      this.$forceUpdate();
-      console.log(this.liked);
+      if (!this.isLiked) {
+        this.$store.commit("putIntoLiked", {
+          liked: true,
+          id: this.id,
+        });
+      } else {
+        this.$store.commit("putIntoLiked", {
+          liked: false,
+          id: this.id,
+        });
+      }
+
+      console.log(this.isLiked);
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="this.basket.length > 0" class="order">
+    <div v-if="this.basket.length > 0 || isLiked" class="order">
       <router-link to="/basket" class="button" @click="hideProducts"
         >Перейти к оформлению
         <div class="counter-dot">{{ basket.length }}</div></router-link
@@ -40,9 +40,9 @@ export default {
   },
   computed: {
     ...mapState(["list", "basket"]),
-    // isLiked() {
-    //   return this.list.findIndex((item) => item.liked === true);
-    // },
+    isLiked() {
+      return this.list.some((item) => item.liked === true);
+    },
   },
   mounted() {
     //   fetch("https://random-data-api.com/api/food/random_food?size=30")

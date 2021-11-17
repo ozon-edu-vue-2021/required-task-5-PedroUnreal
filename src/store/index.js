@@ -16,9 +16,17 @@ export default new Vuex.Store({
       state.basket.push(newProduct);
     },
     putIntoLiked: (state, { liked, id }) => {
-      state.list.forEach((item) =>
-        item.id === id ? (item.liked = liked) : ""
-      );
+      const likedItemIndex = state.list.findIndex((item) => item.id === id);
+
+      if (likedItemIndex !== -1) {
+        const newList = [...state.list];
+        newList.splice(likedItemIndex, 1, {
+          ...state.list[likedItemIndex],
+          liked: liked,
+        });
+
+        state.list = [...newList];
+      }
     },
     changeQty: (state, { qty, id }) => {
       state.basket.forEach((item, index) =>
