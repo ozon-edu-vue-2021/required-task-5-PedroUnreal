@@ -106,8 +106,6 @@ export default {
           id: this.id,
         });
       }
-
-      console.log(this.isLiked);
     },
   },
 };

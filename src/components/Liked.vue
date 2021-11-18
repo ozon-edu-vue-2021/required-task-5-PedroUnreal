@@ -7,9 +7,11 @@
         :key="index"
         :index="index"
         :liked="liked"
+        :id="liked[index].id"
       />
     </div>
     <router-link to="/" class="button">Назад к каталогу </router-link>
+    <router-link to="/basket" class="button">Перейти в корзину</router-link>
   </div>
 </template>
 
@@ -20,18 +22,21 @@ import LikedProduct from "./LikedProduct.vue";
 export default {
   name: "Liked",
   components: { LikedProduct },
-  created() {
-    this.liked = this.list.filter((item) => item.liked === true);
-    console.log(this.liked);
-  },
+  //   created() {
+  //     const filteredList = this.list.filter((item) => item.liked === true);
+  //     this.liked = [...filteredList];
+  //   },
   computed: {
     ...mapState(["list", "basket"]),
     ...mapGetters(["getTotal"]),
+    liked() {
+      return [...this.list.filter((item) => item.liked === true)];
+    },
   },
   //props: ["index"],
   data() {
     return {
-      liked: [],
+      //liked: [],
     };
   },
 };
@@ -47,5 +52,8 @@ export default {
   right: 60px;
   font-size: 1.2em;
   font-weight: 700;
+}
+.button {
+  margin-left: 10px;
 }
 </style>

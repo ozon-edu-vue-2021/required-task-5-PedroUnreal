@@ -1,11 +1,17 @@
 <template>
   <div>
     <div class="product">
+        {{id}}
       <div class="description">{{ description }}</div>
       <div class="price">{{ calcPrice }} руб</div>
       <button @click="putIntoBasket" type="button" class="button">
         Добавить в корзину
       </button>
+      <div class="liked">
+        <button @click="putIntoLiked" type="button" class="button">
+          Удалить из избранного
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -15,29 +21,32 @@ import { mapState } from "vuex";
 
 export default {
   name: "LikedCard",
-  props: ["index", "liked"],
+  props: ["index", "liked", "id"],
   computed: {
     ...mapState(["list", "basket"]),
     description() {
-      return this.liked[this.index].description;
+      return this.list.find((item) => item.id === this.id).description;
     },
     calcPrice() {
-      return Math.floor((this.list[this.index].id / 27) * 2);
+      return Math.floor(((this.list.find((item) => item.id === this.id).id) / 27) * 2);
     },
     calcId() {
-      return this.liked[this.index].id;
+      return this.list.find((item) => item.id === this.id).id;
+    },
+    isLiked() {
+      return this.list.find((item) => item.id === this.id).liked;
     },
   },
   methods: {
     putIntoBasket() {
       this.key++;
-      if (this.basket.findIndex((item) => item.id === this.id) === -1) {
+      if (this.basket.findIndex((item) => item.id === this.calcId) === -1) {
         this.$store.commit("putIntoBasket", {
           description: this.description,
           price: this.calcPrice,
           pictureId: this.index,
-          id: this.id,
-          qty: 1,
+          id: this.calcId,
+          qty: 10,
         });
         this.qty = 1;
       } else {
@@ -58,6 +67,19 @@ export default {
     },
     update() {
       this.qty = this.localQty;
+    },
+    putIntoLiked() {
+      if (!this.isLiked) {
+        this.$store.commit("putIntoLiked", {
+          liked: true,
+          id: this.calcId,
+        });
+      } else {
+        this.$store.commit("putIntoLiked", {
+          liked: false,
+          id: this.calcId,
+        });
+      }
     },
   },
 };
@@ -90,6 +112,10 @@ export default {
 .description {
   margin-bottom: 25px;
   min-height: 100px;
+}
+
+.liked {
+  margin-left: 10px;
 }
 
 img {
