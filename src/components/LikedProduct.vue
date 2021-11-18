@@ -46,9 +46,8 @@ export default {
       return this.list.find((item) => item.id === this.id).liked;
     },
     qty() {
-      return this.basket.find((item) => item.id === this.id)
-        ? this.basket.find((item) => item.id === this.id).qty
-        : 0;
+      const found = this.basket.find((item) => item.id === this.id);
+      return found ? found.qty : 0;
     },
   },
   methods: {
