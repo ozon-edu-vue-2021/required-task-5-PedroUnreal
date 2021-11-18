@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="product">
-        {{id}}
       <div class="description">{{ description }}</div>
       <div class="price">{{ calcPrice }} руб</div>
       <button @click="putIntoBasket" type="button" class="button">
         Добавить в корзину
       </button>
+      <Counter :qty="this.qty" :id="this.calcId" :key="key" class="counter" />
       <div class="liked">
         <button @click="putIntoLiked" type="button" class="button">
           Удалить из избранного
@@ -18,23 +18,37 @@
 
 <script>
 import { mapState } from "vuex";
+import Counter from "./Counter.vue";
 
 export default {
   name: "LikedCard",
   props: ["index", "liked", "id"],
+  components: { Counter },
+  data() {
+    return {
+      key: 1,
+    };
+  },
   computed: {
     ...mapState(["list", "basket"]),
     description() {
       return this.list.find((item) => item.id === this.id).description;
     },
     calcPrice() {
-      return Math.floor(((this.list.find((item) => item.id === this.id).id) / 27) * 2);
+      return Math.floor(
+        (this.list.find((item) => item.id === this.id).id / 27) * 2
+      );
     },
     calcId() {
       return this.list.find((item) => item.id === this.id).id;
     },
     isLiked() {
       return this.list.find((item) => item.id === this.id).liked;
+    },
+    qty() {
+      return this.basket.find((item) => item.id === this.id)
+        ? this.basket.find((item) => item.id === this.id).qty
+        : 0;
     },
   },
   methods: {
@@ -46,28 +60,27 @@ export default {
           price: this.calcPrice,
           pictureId: this.index,
           id: this.calcId,
-          qty: 10,
+          qty: 1,
         });
-        this.qty = 1;
       } else {
         this.increaseQty();
       }
     },
     increaseQty() {
-      this.qty++;
+      const localQty = this.qty + 1;
       this.$store.commit("changeQty", {
-        qty: this.qty,
-        id: this.id,
+        qty: localQty,
+        id: this.calcId,
       });
     },
-    setCurrentQty() {
-      this.basket.forEach((item) =>
-        item.id === this.id ? (this.qty = item.qty) : ""
-      );
-    },
-    update() {
-      this.qty = this.localQty;
-    },
+    // setCurrentQty() {
+    //   this.basket.forEach((item) =>
+    //     item.id === this.id ? (this.qty = item.qty) : ""
+    //   );
+    // },
+    // update() {
+    //   this.qty = this.localQty;
+    // },
     putIntoLiked() {
       if (!this.isLiked) {
         this.$store.commit("putIntoLiked", {
@@ -106,7 +119,8 @@ export default {
   font-weight: 700;
 }
 .counter {
-  margin: -10px;
+  height: 50px;
+  width: 140px;
 }
 
 .description {

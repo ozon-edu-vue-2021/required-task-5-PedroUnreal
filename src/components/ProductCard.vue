@@ -16,7 +16,7 @@
           :update="this.update"
         />
         <button @click="putIntoLiked" type="button" class="liked">
-          {{isLiked? "Удалить из избранного" : "Добавить в избранное" }}
+          {{ isLiked ? "Удалить из избранного" : "Добавить в избранное" }}
         </button>
       </div>
     </div>
